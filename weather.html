@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Weather</title>	
+	<style>
+	#today{
+		background:red;
+	}
+	th,td{
+		padding: 15px;
+	}
+	</style>
+</head>
+<body>
+	<script src="WeatherInfo.js"></script>
+	<h1> Enter your city and country code to start weather forcast</h1>
+	City: <input type="text" id="cityName"><br>
+	Country Code: <input type="text" id="countryCode"><br>
+	<br>
+	<button value="result" onclick="check_six();">search</button>
+	<button value="refresh" onclick="window.location.reload();">reset</button>
+	<h1>Calendar</h1>
+	<div id="calenar-month-year"></div>
+	<div id="calendar-dates"></div>
+	<script>
+	function displaying(){
+		document.getElementById("show").style.display="block";
+	}
+	window.onload= function(){
+			// d is the current date
+			var d = new Date();
+			var month_name = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+			// month: 0-11
+			var month = d.getMonth();
+			// current year:2019
+			var year = d.getFullYear();
+			// July 1 2019
+			var first_date = month_name[month]+" "+1+" "+year;
+			// Mon July 1 2019
+			var temp = new Date(first_date).toDateString();
+			// Mon
+			var first_day = temp.substring(0,3);
+			var day_name = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+			var day_no = day_name.indexOf(first_day);
+			// 31
+			var days = new Date(year,month+1,0).getDate();
+			var calendar = get_calendar(day_no,days);
+			document.getElementById("calenar-month-year").innerHTML = month_name[month]+" "+year;
+			document.getElementById("calendar-dates").appendChild(calendar);
+		}
+		function get_calendar(day_no,days){
+			var todaysDate = new Date().getDate();
+			var table = document.createElement('table');
+			var tr = document.createElement('tr');
+			// first row for the day letters
+			for (var col=0; col<=6; col++){
+				var th = document.createElement('th');
+				th.innerHTML="MTWTFSS"[col];
+				tr.appendChild(th);
+			}
+			table.appendChild(tr);
+			// starting 2nd row
+			tr = document.createElement('tr');
+			var col;
+			for (col=0;col<=6;col++){
+				if (col==day_no){
+					break;
+				}
+				var td= document.createElement('td');
+				td.innerHTML="";
+				tr.appendChild(td);
+			}
+			var count = 1;
+			for (;col<=6;col++){
+				var td = document.createElement('td');
+				if (count == todaysDate){
+					td.id = 'today';
+				}else{
+					td.id = count;
+				}
+				console.log(count);
+				td.innerHTML = count;
+				count++;
+				tr.appendChild(td);
+			}
+			table.appendChild(tr);
+			// rest of the date rows
+			for (var r=3; r<=7; r++){
+				tr = document.createElement('tr');
+				for (var col=0; col<=6; col++){
+					if (count > days){
+						table.appendChild(tr);
+						return table;
+					}
+					var td = document.createElement('td');
+					if (count == todaysDate){
+						td.id='today';
+					}else{
+						td.id = count;
+					}
+					td.innerHTML = count;
+					count++;
+					tr.appendChild(td);
+				}
+				table.appendChild(tr);
+			}
+			return table;
+		}
+	</script>
+</body>
+
+</html>       
